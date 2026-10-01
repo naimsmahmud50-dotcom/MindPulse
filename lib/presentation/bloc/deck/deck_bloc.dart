@@ -27,6 +27,13 @@ class ToggleFlashcardMasteredEvent extends DeckEvent {
   List<Object?> get props => [deckId, flashcardId];
 }
 
+class AddNewDeckEvent extends DeckEvent {
+  final StudyDeck deck;
+  const AddNewDeckEvent(this.deck);
+  @override
+  List<Object?> get props => [deck];
+}
+
 // STATES
 abstract class DeckState extends Equatable {
   const DeckState();
@@ -76,6 +83,15 @@ class DeckBloc extends Bloc<DeckEvent, DeckState> {
     on<LoadDecksEvent>(_onLoadDecks);
     on<SelectDeckEvent>(_onSelectDeck);
     on<ToggleFlashcardMasteredEvent>(_onToggleFlashcardMastered);
+    on<AddNewDeckEvent>((event, emit) {
+      if (state is DeckLoaded) {
+        final current = state as DeckLoaded;
+        emit(current.copyWith(
+          decks: [event.deck, ...current.decks],
+          selectedDeck: event.deck,
+        ));
+      }
+    });
   }
 
   void _onLoadDecks(LoadDecksEvent event, Emitter<DeckState> emit) {

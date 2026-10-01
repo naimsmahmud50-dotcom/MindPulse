@@ -7,6 +7,7 @@ import '../bloc/quiz/quiz_bloc.dart';
 import '../widgets/chunky_3d_button.dart';
 import '../widgets/gamified_progress_bar.dart';
 import '../widgets/streak_header_widget.dart';
+import 'document_upload_screen.dart';
 import 'flashcard_screen.dart';
 import 'quiz_screen.dart';
 
@@ -186,9 +187,16 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildAiDocBanner(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const DocumentUploadScreen()),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
         color: AppColors.darkCard,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppColors.info.withValues(alpha: 0.4), width: 1.5),
@@ -230,8 +238,9 @@ class HomeScreen extends StatelessWidget {
           const Icon(Icons.arrow_forward_ios_rounded, color: AppColors.darkTextSecondary, size: 16),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildDeckCard(BuildContext context, StudyDeck deck) {
     return Container(
