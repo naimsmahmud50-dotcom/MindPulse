@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/models/study_models.dart';
 import '../bloc/deck/deck_bloc.dart';
+import '../bloc/quiz/quiz_bloc.dart';
 import '../widgets/chunky_3d_button.dart';
 import '../widgets/gamified_progress_bar.dart';
 import 'flashcard_screen.dart';
+import 'quiz_screen.dart';
 
 class DocumentUploadScreen extends StatefulWidget {
   const DocumentUploadScreen({super.key});
@@ -24,6 +26,7 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
   double _cardCount = 5;
   bool _includeQuiz = true;
   String _difficulty = 'Intermediate';
+  bool _deepResearchMode = true; // Deep analytical research on PDF
 
   bool _isProcessing = false;
   double _processingProgress = 0.0;
@@ -58,10 +61,37 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
       'quizzes': [
         const QuizQuestion(
           id: 'gen-q1',
-          question: 'Which layer of Clean Architecture contains Use Cases?',
+          question: 'Which layer of Clean Architecture strictly contains Use Cases?',
           options: ['Data Layer', 'Domain Layer', 'Presentation Layer', 'Network Layer'],
           correctOptionIndex: 1,
           explanation: 'Use Cases encapsulate single business actions and live strictly inside the Domain layer.',
+          citation: 'Page 3, Section 1.2 "Domain Layer Architecture"',
+        ),
+        const QuizQuestion(
+          id: 'gen-q2',
+          question: 'Why should the Presentation layer never communicate directly with Remote Data Sources?',
+          options: [
+            'It slows down widget compilation',
+            'It violates separation of concerns and bypasses domain validation in Use Cases',
+            'Flutter does not allow HTTP calls in widgets',
+            'It forces widgets to be Stateful'
+          ],
+          correctOptionIndex: 1,
+          explanation: 'Bypassing the Domain layer leads to tightly coupled UI code and untestable business logic.',
+          citation: 'Page 6, Section 2.4 "Data Flow Boundaries"',
+        ),
+        const QuizQuestion(
+          id: 'gen-q3',
+          question: 'What distinguishes an Entity from a Model (DTO) in Clean Architecture?',
+          options: [
+            'Entities are mutable while Models are immutable',
+            'Entities represent pure business objects; Models handle JSON serialization and API schemas',
+            'Entities are only used for SQLite databases',
+            'Models can only be used inside BLoC'
+          ],
+          correctOptionIndex: 1,
+          explanation: 'Models handle raw serialization (fromJson/toJson), while Entities encapsulate immutable business objects.',
+          citation: 'Page 9, Section 3.1 "Entities vs Data Transfer Objects"',
         ),
       ],
     },
@@ -89,7 +119,21 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
           question: 'Which of the following is NOT one of the five primary objectives of Maqasid al-Shariah?',
           options: ['Preservation of Life', 'Preservation of Wealth', 'Preservation of Social Media', 'Preservation of Intellect'],
           correctOptionIndex: 2,
-          explanation: 'The five objectives are Religion, Life, Intellect, Lineage, and Wealth.',
+          explanation: 'The five universally accepted objectives are Religion, Life, Intellect, Lineage/Family, and Wealth.',
+          citation: 'Page 4, Section "The Five Universal Necessities"',
+        ),
+        const QuizQuestion(
+          id: 'gen-q202',
+          question: 'What does "Ijma" refer to in Islamic legal methodology?',
+          options: [
+            'Individual legal deduction',
+            'The unanimous consensus of qualified scholars on a legal matter after the era of the Prophet (PBUH)',
+            'A historical chronicle',
+            'Personal opinion of a ruler'
+          ],
+          correctOptionIndex: 1,
+          explanation: 'Ijma represents the binding consensus of the Muslim juristic community on legal rulings.',
+          citation: 'Page 8, Section "Secondary Methodological Sources"',
         ),
       ],
     },
@@ -117,7 +161,21 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
           question: 'In the CAP theorem, what does "P" stand for?',
           options: ['Performance', 'Partition Tolerance', 'Persistence', 'Parallelism'],
           correctOptionIndex: 1,
-          explanation: 'Partition Tolerance means the system continues to operate despite network messages being dropped or delayed.',
+          explanation: 'Partition Tolerance means the distributed system continues operating despite dropped or delayed network packets.',
+          citation: 'Page 5, Section "Network Partitions and Brewer\'s Theorem"',
+        ),
+        const QuizQuestion(
+          id: 'gen-q302',
+          question: 'What critical distributed challenge does the Two-Phase Commit (2PC) protocol solve?',
+          options: [
+            'Optimizing SQL query index scans',
+            'Coordinating atomic transaction commit across multiple independent distributed database nodes',
+            'Encrypting data at rest',
+            'Compressing WAL log segments'
+          ],
+          correctOptionIndex: 1,
+          explanation: '2PC ensures all distributed shards either commit or abort a transaction atomically.',
+          citation: 'Page 11, Section "Distributed Consensus and Two-Phase Commit"',
         ),
       ],
     },
@@ -146,31 +204,38 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
     setState(() {
       _isProcessing = true;
       _processingProgress = 0.15;
-      _processingStatus = 'Scanning document and extracting text...';
+      _processingStatus = 'Scanning document pages & OCR text extraction...';
+    });
+
+    await Future.delayed(const Duration(milliseconds: 650));
+    if (!mounted) return;
+    setState(() {
+      _processingProgress = 0.40;
+      _processingStatus = 'Conducting deep research on key concepts & definitions...';
     });
 
     await Future.delayed(const Duration(milliseconds: 700));
     if (!mounted) return;
     setState(() {
-      _processingProgress = 0.45;
-      _processingStatus = 'Extracting core definitions and high-yield concepts...';
+      _processingProgress = 0.70;
+      _processingStatus = 'Synthesizing research-grade MCQs with page citations...';
     });
 
-    await Future.delayed(const Duration(milliseconds: 700));
+    await Future.delayed(const Duration(milliseconds: 650));
     if (!mounted) return;
     setState(() {
-      _processingProgress = 0.80;
-      _processingStatus = 'Synthesizing 3D interactive flashcards & hints...';
-    });
-
-    await Future.delayed(const Duration(milliseconds: 600));
-    if (!mounted) return;
-    setState(() {
-      _processingProgress = 1.0;
-      _processingStatus = 'Generating gamified quiz arena... Done! ✨';
+      _processingProgress = 0.90;
+      _processingStatus = 'Balancing difficulty curve & streak rewards for Quiz Arena...';
     });
 
     await Future.delayed(const Duration(milliseconds: 500));
+    if (!mounted) return;
+    setState(() {
+      _processingProgress = 1.0;
+      _processingStatus = 'Research Complete! 4 MCQs & Flashcards Ready ✨';
+    });
+
+    await Future.delayed(const Duration(milliseconds: 400));
     if (!mounted) return;
 
     // Find sample data or construct fallback
@@ -182,7 +247,7 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
     final newDeck = StudyDeck(
       id: 'custom-${DateTime.now().millisecondsSinceEpoch}',
       title: title,
-      description: 'AI-generated study deck from $_selectedFileName (${_selectedPageCount > 0 ? "$_selectedPageCount pages" : "Notes"}).',
+      description: 'AI-researched study deck from $_selectedFileName (${_selectedPageCount > 0 ? "$_selectedPageCount pages" : "Notes"}).',
       category: matchedSample['category'] as String,
       iconCode: 'auto_awesome',
       cardCount: (matchedSample['cards'] as List).length,
@@ -196,10 +261,136 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
 
     setState(() => _isProcessing = false);
 
-    // Direct transition to flashcards
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => FlashcardScreen(deck: newDeck)),
+    // Show celebratory Research Summary BottomSheet with direct Quiz Arena launch
+    _showResearchCompleteSheet(newDeck);
+  }
+
+  void _showResearchCompleteSheet(StudyDeck deck) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (sheetContext) => Container(
+        padding: const EdgeInsets.all(28),
+        decoration: const BoxDecoration(
+          color: AppColors.darkSurface,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+          border: Border(top: BorderSide(color: AppColors.primary, width: 2.0)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 48,
+              height: 5,
+              decoration: BoxDecoration(
+                color: AppColors.darkBorder,
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Icon & Badge
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.accentOrange.withValues(alpha: 0.15),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.bolt_rounded, color: AppColors.accentOrange, size: 40),
+            ),
+            const SizedBox(height: 14),
+
+            const Text(
+              'AI Research Complete! ⚡',
+              style: TextStyle(
+                color: AppColors.darkTextPrimary,
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              'Successfully analyzed ${deck.title}. Generated ${deck.quizQuestions.length} research-grade MCQs with citations & ${deck.flashcards.length} 3D flashcards!',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: AppColors.darkTextSecondary,
+                fontSize: 14,
+                height: 1.4,
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
+            // MCQ Quiz Play Button (Top Priority)
+            Chunky3DButton(
+              color: AppColors.accentOrange,
+              shadowColor: AppColors.accentOrangeDark,
+              onPressed: () {
+                Navigator.pop(sheetContext); // Close sheet
+                context.read<QuizBloc>().add(StartQuizEvent(deck));
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const QuizScreen()),
+                );
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.play_arrow_rounded, color: Colors.white, size: 24),
+                  const SizedBox(width: 8),
+                  Text(
+                    'PLAY AI MCQ QUIZ NOW (${deck.quizQuestions.length} Qs) ⚡',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 14,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 12),
+
+            // Study Flashcards Button
+            Chunky3DButton(
+              color: AppColors.primary,
+              shadowColor: AppColors.primaryDark,
+              onPressed: () {
+                Navigator.pop(sheetContext); // Close sheet
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => FlashcardScreen(deck: deck)),
+                );
+              },
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.flip_rounded, color: Colors.white, size: 18),
+                  SizedBox(width: 8),
+                  Text(
+                    'Review 3D Flashcards First',
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            TextButton(
+              onPressed: () {
+                Navigator.pop(sheetContext);
+                Navigator.pop(context); // Back to Home
+              },
+              child: const Text('Back to Decks List', style: TextStyle(color: AppColors.darkTextSecondary, fontWeight: FontWeight.w600)),
+            ),
+            const SizedBox(height: 10),
+          ],
+        ),
+      ),
     );
   }
 
@@ -208,7 +399,7 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
     return Scaffold(
       backgroundColor: AppColors.darkBackground,
       appBar: AppBar(
-        title: const Text('AI Document Ingestion'),
+        title: const Text('AI Document & MCQ Research'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
           onPressed: () => Navigator.pop(context),
@@ -224,7 +415,7 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
                 children: [
                   // Header description
                   const Text(
-                    'Upload a PDF or paste notes to automatically generate tactile 3D flashcards and quizzes.',
+                    'Upload a PDF document. MindPulse AI will research the text, extract key concepts, and generate an interactive MCQ Quiz Arena.',
                     style: TextStyle(color: AppColors.darkTextSecondary, fontSize: 14, height: 1.4),
                   ),
 
@@ -251,7 +442,7 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
                               ),
                               child: Center(
                                 child: Text(
-                                  '📄 Upload PDF File',
+                                  '📄 Upload PDF Document',
                                   style: TextStyle(
                                     color: _selectedTab == 0 ? Colors.white : AppColors.darkTextSecondary,
                                     fontWeight: FontWeight.w700,
@@ -273,7 +464,7 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
                               ),
                               child: Center(
                                 child: Text(
-                                  '✍️ Paste Raw Notes',
+                                  '✍️ Paste Study Notes',
                                   style: TextStyle(
                                     color: _selectedTab == 1 ? Colors.white : AppColors.darkTextSecondary,
                                     fontWeight: FontWeight.w700,
@@ -298,7 +489,7 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
 
                     // Quick Select Sample PDFs for Instant Testing
                     const Text(
-                      'Or Select a Demo Document:',
+                      'Or Select a Preloaded PDF Document to Research:',
                       style: TextStyle(
                         color: AppColors.darkTextPrimary,
                         fontSize: 14,
@@ -346,7 +537,7 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
                                       ),
                                       const SizedBox(height: 2),
                                       Text(
-                                        '${sample['category']} • ${sample['pages']} pages • ${sample['size']}',
+                                        '${sample['category']} • ${sample['pages']} pages • ${(sample['quizzes'] as List).length} MCQs ready',
                                         style: const TextStyle(color: AppColors.darkTextSecondary, fontSize: 11),
                                       ),
                                     ],
@@ -367,7 +558,7 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
                       maxLines: 8,
                       style: const TextStyle(color: AppColors.darkTextPrimary, fontSize: 14),
                       decoration: InputDecoration(
-                        hintText: 'Paste lecture notes, book summaries, or documentation here...',
+                        hintText: 'Paste lecture notes, book chapters, or documentation here...',
                         hintStyle: const TextStyle(color: AppColors.darkTextSecondary, fontSize: 13),
                         filled: true,
                         fillColor: AppColors.darkCard,
@@ -389,6 +580,49 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
 
                   const SizedBox(height: 28),
 
+                  // Deep Research Mode Banner
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: AppColors.accentOrange.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(color: AppColors.accentOrange.withValues(alpha: 0.3)),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.psychology_rounded, color: AppColors.accentOrange, size: 28),
+                        const SizedBox(width: 12),
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Deep AI Concept Research',
+                                style: TextStyle(
+                                  color: AppColors.darkTextPrimary,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 13,
+                                ),
+                              ),
+                              Text(
+                                'Extracts plausible distractors and page citation references for every MCQ.',
+                                style: TextStyle(color: AppColors.darkTextSecondary, fontSize: 11),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Switch(
+                          value: _deepResearchMode,
+                          activeThumbColor: AppColors.accentOrange,
+                          activeTrackColor: AppColors.accentOrangeDark,
+                          onChanged: (val) => setState(() => _deepResearchMode = val),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
                   // Deck Title Field
                   const Text(
                     'Deck Title (Optional)',
@@ -399,7 +633,7 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
                     controller: _titleController,
                     style: const TextStyle(color: AppColors.darkTextPrimary, fontSize: 14),
                     decoration: InputDecoration(
-                      hintText: 'e.g. Clean Architecture Mastery',
+                      hintText: 'e.g. Distributed Database Mastery',
                       hintStyle: const TextStyle(color: AppColors.darkTextSecondary, fontSize: 13),
                       filled: true,
                       fillColor: AppColors.darkCard,
@@ -418,11 +652,11 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
-                        'Target Card Count',
+                        'Target Card & MCQ Count',
                         style: TextStyle(color: AppColors.darkTextPrimary, fontWeight: FontWeight.w600, fontSize: 14),
                       ),
                       Text(
-                        '${_cardCount.toInt()} Cards',
+                        '${_cardCount.toInt()} Items',
                         style: const TextStyle(color: AppColors.streakAmber, fontWeight: FontWeight.w800, fontSize: 14),
                       ),
                     ],
@@ -488,10 +722,10 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
                   // Primary Action Button
                   Chunky3DButton(
                     color: (_selectedFileName != null || _textController.text.isNotEmpty)
-                        ? AppColors.primary
+                        ? AppColors.accentOrange
                         : Colors.grey.shade800,
                     shadowColor: (_selectedFileName != null || _textController.text.isNotEmpty)
-                        ? AppColors.primaryDark
+                        ? AppColors.accentOrangeDark
                         : Colors.grey.shade900,
                     onPressed: (_selectedFileName != null || _textController.text.isNotEmpty)
                         ? _processAiDocument
@@ -499,11 +733,11 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.auto_awesome_rounded, color: Colors.white, size: 20),
+                        Icon(Icons.bolt_rounded, color: Colors.white, size: 22),
                         SizedBox(width: 8),
                         Text(
-                          'SYNTHESIZE STUDY DECK ⚡',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15, letterSpacing: 0.8),
+                          'RESEARCH PDF & GENERATE MCQS ⚡',
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 14, letterSpacing: 0.5),
                         ),
                       ],
                     ),
@@ -526,15 +760,15 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
                   decoration: BoxDecoration(
                     color: AppColors.darkSurface,
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: AppColors.primary, width: 2),
+                    border: Border.all(color: AppColors.accentOrange, width: 2),
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.auto_awesome_rounded, color: AppColors.primary, size: 48),
+                      const Icon(Icons.psychology_rounded, color: AppColors.accentOrange, size: 48),
                       const SizedBox(height: 18),
                       const Text(
-                        'AI Document Engine',
+                        'AI Research Engine',
                         style: TextStyle(color: AppColors.darkTextPrimary, fontSize: 18, fontWeight: FontWeight.w800),
                       ),
                       const SizedBox(height: 8),
@@ -547,7 +781,7 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
                       GamifiedProgressBar(
                         value: _processingProgress,
                         height: 12,
-                        fillColor: AppColors.primary,
+                        fillColor: AppColors.accentOrange,
                       ),
                     ],
                   ),
@@ -566,10 +800,10 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: hasFile ? AppColors.primary.withValues(alpha: 0.08) : AppColors.darkCard,
+        color: hasFile ? AppColors.accentOrange.withValues(alpha: 0.08) : AppColors.darkCard,
         borderRadius: BorderRadius.circular(22),
         border: Border.all(
-          color: hasFile ? AppColors.primary : AppColors.darkBorder,
+          color: hasFile ? AppColors.accentOrange : AppColors.darkBorder,
           width: 2.0,
         ),
       ),
@@ -578,12 +812,12 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: hasFile ? AppColors.primary.withValues(alpha: 0.2) : AppColors.darkSurface,
+              color: hasFile ? AppColors.accentOrange.withValues(alpha: 0.2) : AppColors.darkSurface,
               shape: BoxShape.circle,
             ),
             child: Icon(
-              hasFile ? Icons.file_present_rounded : Icons.cloud_upload_rounded,
-              color: hasFile ? AppColors.primary : AppColors.darkTextSecondary,
+              hasFile ? Icons.picture_as_pdf_rounded : Icons.cloud_upload_rounded,
+              color: hasFile ? AppColors.accentOrange : AppColors.darkTextSecondary,
               size: 36,
             ),
           ),
@@ -599,7 +833,7 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
           ),
           const SizedBox(height: 4),
           Text(
-            hasFile ? '$_selectedPageCount pages extracted' : 'Supports searchable PDF & markdown notes',
+            hasFile ? '$_selectedPageCount pages extracted for research' : 'Supports multi-page PDF & academic papers',
             style: const TextStyle(color: AppColors.darkTextSecondary, fontSize: 12),
           ),
           const SizedBox(height: 16),

@@ -45,6 +45,7 @@ class QuizQuestion extends Equatable {
   final List<String> options;
   final int correctOptionIndex;
   final String explanation;
+  final String? citation;
 
   const QuizQuestion({
     required this.id,
@@ -52,10 +53,11 @@ class QuizQuestion extends Equatable {
     required this.options,
     required this.correctOptionIndex,
     required this.explanation,
+    this.citation,
   });
 
   @override
-  List<Object?> get props => [id, question, options, correctOptionIndex, explanation];
+  List<Object?> get props => [id, question, options, correctOptionIndex, explanation, citation];
 }
 
 class StudyDeck extends Equatable {

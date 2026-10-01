@@ -95,18 +95,45 @@ class QuizScreen extends StatelessWidget {
 
                 // Question Box
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      question.question,
-                      style: const TextStyle(
-                        color: AppColors.darkTextPrimary,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
-                        height: 1.35,
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (question.citation != null)
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: AppColors.info.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: AppColors.info.withValues(alpha: 0.3)),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.menu_book_rounded, color: AppColors.info, size: 14),
+                              const SizedBox(width: 6),
+                              Text(
+                                question.citation!,
+                                style: const TextStyle(
+                                  color: AppColors.info,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      Text(
+                        question.question,
+                        style: const TextStyle(
+                          color: AppColors.darkTextPrimary,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                          height: 1.35,
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
 
@@ -278,6 +305,17 @@ class QuizScreen extends StatelessWidget {
               height: 1.4,
             ),
           ),
+          if (state.currentQuestion.citation != null) ...[
+            const SizedBox(height: 6),
+            Text(
+              '📑 ${state.currentQuestion.citation}',
+              style: const TextStyle(
+                color: AppColors.info,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
           const SizedBox(height: 16),
           Chunky3DButton(
             color: isCorrect ? AppColors.success : AppColors.error,
