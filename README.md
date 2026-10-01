@@ -23,8 +23,10 @@
 ## 🌟 Key Highlights
 
 - **🎮 Duolingo-Inspired Tactile UI (`Chunky3DButton`):** Physics-based push-down 3D bevel buttons with responsive spring haptics.
+- **📑 AI Document & PDF Deep Research Engine:** Upload academic PDFs or engineering papers; AI analyzes chapters, extracts citations, and synthesizes balanced 4-choice MCQs.
+- **🎯 Instant MCQ Quiz Arena:** Jump straight from PDF ingestion into real-time gamified MCQ battles complete with page-level citations (`📑 PDF Ref: Sec 3.2`), life depletion, and instant knowledge reinforcement.
 - **🎴 3D Perspective Flip Cards (`FlipCardWidget`):** Smooth $Y$-axis matrix transform (`Matrix4.identity()..setEntry(3, 2, 0.001)..rotateY()`) allowing interactive card flips, code snippet reveals, and mastery status toggles.
-- **⚡ Gamified Quiz Arena:**
+- **⚡ Gamified Quiz Arena Mechanics:**
   - **Hearts / Lives Mechanism:** $3$ Hearts per session that dynamically deplete on incorrect answers.
   - **Streak Combo Multipliers:** Consecutive correct answers trigger $2\times$ and $3\times$ XP bonus multipliers.
   - **Dopamine Confetti Particle Celebration:** Full-screen celebratory particle explosions on quiz victory.
@@ -86,8 +88,9 @@ lib/
 │   │       └── quiz_bloc.dart      # Lives, combo streaks, timers, & scoring engine
 │   ├── screens/
 │   │   ├── home_screen.dart        # Deck selector, daily pulse goal, streak header
+│   │   ├── document_upload_screen.dart # AI PDF research, citation extraction & MCQ generation
 │   │   ├── flashcard_screen.dart   # Interactive 3D flip card carousel
-│   │   ├── quiz_screen.dart        # Gamified quiz arena with bottom feedback drawer
+│   │   ├── quiz_screen.dart        # Gamified quiz arena with citations & feedback drawer
 │   │   └── quiz_result_screen.dart # Confetti celebration & performance analytics
 │   └── widgets/
 │       ├── chunky_3d_button.dart   # Tactile 3D push-down button
